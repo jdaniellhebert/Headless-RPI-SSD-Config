@@ -40,3 +40,5 @@ $ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@<IP address
 ```
 $ sudo raspi-config
 ```
+#### Links
+* https://github.com/hypriot/flash
