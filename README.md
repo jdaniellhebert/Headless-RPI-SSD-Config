@@ -1,33 +1,31 @@
 # Headless-RPI-SSD-Config
 After you follow this recipe you will be able to boot RPI and connect via wifi and SSH
-#### Install Hypriot flash command (MacOS)
-```
-$ brew install pv  
-$ brew install awscli  
+#### Copy Raspbian image to SD Card with Etcher Application (MacOS)
+* Download application:  https://etcher.io/
+* Download latest Raspbian from Rpi foundation: https://www.raspberrypi.org/downloads/raspbian/ (Lite version)
+* Run Etcher Application and copy to SD card.
 
-$ curl -O https://raw.githubusercontent.com/hypriot/flash/master/$(uname -s)/flash  
-$ chmod +x flash  
-$ sudo mv flash /usr/local/bin/flash  
-```
-#### Copy image to SD Card using Hypriot flash command (MacOS)
-```
-$ diskutil list   # Lists mounted drives.  Make a note of the disk # of the SD card.  
-$ flash --hostname <unique-rpi-hostname> --ssid <Your-Wifi-SID> --password <Your-Wifi-Password> http://downloads.hypriot.com/hypriotos-rpi-v1.0.0.img.zip  
+#### Set up headless boot Wifi credentials and enable SSH for initial boot from SD card
+The boot partition on a Pi should be accessible from any machine with an SD card reader, on Windows, Mac, or Linux. 
 
-# Modify the fields above that are delinated by "<>" with a unique hostname and wifi creditionals.
-# WARNING: flash will prompt you to double check the SD card disk #, take care.
-
-# Example:  
-$ flash --hostname v2c1 --ssid "name with spaces" --password passwordwithnospaces https://github.com/hypriot/image-builder-rpi/releases/download/v1.1.0/hypriotos-rpi-v1.1.0.img.zip  
+* To set the Wifi credentials copy a file called "wpa_supplicant.conf" to the /boot/ directory on the SD card.  The file should contain the following:
 ```
-#### Start up Rpi3 with Docker
-1. Plug in SD card and apply power to Rpi3
-2. Use an application for MacOS like "My Net" to scan the network for the IP_Address of the Rpi
-3. From the command line SSH to pi@<IP_Address>, the password is "raspberry".
+network={
+  ssid="The_ESSID_from_earlier"
+  psk="Your_wifi_password"
+}
 ```
-# use a net work scanning app or tool to find the ip address (ex. 192.168.7.41)
-$ ssh pi@192.168.7.41
+* If you want to enable SSH, all you need to do is to put a file called ssh in the /boot/ directory. The contents of the file don’t matter: it can contain any text you like, or even nothing at all. When the Pi boots, it looks for this file; if it finds it, it enables SSH and then deletes the file.  On first boot run raspi-config to enable SSH.
+```
+$ cd /Volumes/boot
+$ touch ssh
+```
+* Both the ssh file and the wpi_supplicant.conf file will be deleted on first boot after they are used.
 
+#### Boot RPI with SD card
+* Run "My Net" application to find IP address of RPI.
+* Then SSH to pi@<IP address>
+```
 $ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@<IP address> # password: raspberry
 ```
 #### Configure RPI
@@ -36,9 +34,9 @@ $ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@<IP address
  * default SSH on
  * enable camera
  * enable I2C
- * etc
 ```
-$ sudo raspi-config
+$ sudo raspi-config  # change SSH default to on & change the rpi password.
 ```
 #### Links
-* https://github.com/hypriot/flash
+* https://www.raspberrypi.org/blog/a-security-update-for-raspbian-pixel/
+* https://www.arrow.com/en/research-and-events/articles/headless-setup-for-your-raspberry-pi-3
