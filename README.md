@@ -1,4 +1,4 @@
-# Headless-RPI-SSD-Config
+# RECIPE--Headless-RPI-SSD-Config
 Recipe to boot RPI and connect via wifi and SSH
 #### Copy Raspbian image to SD Card with Etcher Application (MacOS)
 * Download application:  https://etcher.io/
