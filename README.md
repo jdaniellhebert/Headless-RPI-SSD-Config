@@ -1,5 +1,5 @@
 # Headless-RPI-SSD-Config
-After you follow this recipe you will be able to boot RPI and connect via wifi and SSH
+Recipe to boot RPI and connect via wifi and SSH
 #### Copy Raspbian image to SD Card with Etcher Application (MacOS)
 * Download application:  https://etcher.io/
 * Download latest Raspbian from Rpi foundation: https://www.raspberrypi.org/downloads/raspbian/ (Lite version)
@@ -11,7 +11,7 @@ The boot partition on a Pi should be accessible from any machine with an SD card
 * To set the Wifi credentials copy a file called "wpa_supplicant.conf" to the /boot/ directory on the SD card.  The file should contain the following:
 ```
 network={
-  ssid="The_ESSID_from_earlier"
+  ssid="Your_ESSID"
   psk="Your_wifi_password"
 }
 ```
@@ -20,20 +20,23 @@ network={
 $ cd /Volumes/boot
 $ touch ssh
 ```
-* Both the ssh file and the wpi_supplicant.conf file will be deleted on first boot after they are used.
+* Both the ssh file and the wpi_supplicant.conf file will be deleted on first boot after they are used.  Both of these files are included in this repository.
 
 #### Boot RPI with SD card
-* Run "My Net" application to find IP address of RPI.
-* Then SSH to pi@<IP address>
+* Insert SSD card with new flash image.
+* Power up the RPI and wait 20 seconds.
+* Try to connect to the RPI with SSH.  The out-of-the-box hostname for the RPI is "raspberrypi".  There should be a Bonjour like service running and when the RPI connects to wifi the <hostname> of the RPI should map to the <IP address>.
+```
+$ ssh pi@raspberrypi.local
+```
+* Alternate: Run "My Net" MacOS application to find IP address of RPI. You can find this application in the App Store in the applicaiton tray.  SSH to pi@<IP address>
 ```
 $ ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no pi@<IP address> # password: raspberry
 ```
 #### Configure RPI
 * Once connected to RPI use raspi-config to change:
- * expand filesystem
- * default SSH on
+ * change to default SSH on
  * enable camera
- * enable I2C
 ```
 $ sudo raspi-config  # change SSH default to on & change the rpi password.
 ```
